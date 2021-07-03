@@ -8,6 +8,7 @@ import com.qinxiu.jwtlogin.model.User;
 import java.util.Set;
 import javax.annotation.Resource;
 import javax.transaction.Transactional;
+import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -26,7 +27,7 @@ public class UserTest {
   @Test
   public void insertTest() {
     // Arrange
-    User user = User.builder().email("email").password("123").name("name").role("Admin").build();
+    User user = User.builder().id(1).email("email").password("123").name("name").role("Admin").build();
 
     // Act
     userDAO.save(user);
@@ -38,52 +39,49 @@ public class UserTest {
   @Test
   public void getOneTest() {
     // Arrange
-    User user = User.builder().email("email").password("123").name("name").role("Admin").build();
-    User expectedResult = User.builder().id(1).email("email").password("123").name("name")
+    User user = User.builder().id(1).email("email").password("123").name("name")
         .role("Admin").build();
 
     // Act
     userDAO.save(user);
 
     // Assert
-    assertEquals(expectedResult, userDAO.getOne(1));
+    assertEquals(user, userDAO.getOne(1));
   }
 
 
   @Test
   public void findByIdTest() {
     // Arrange
-    User user = User.builder().email("email").password("123").name("name").role("Admin").build();
-    User expectedResult = User.builder().id(1).email("email").password("123").name("name")
+    User user = User.builder().id(1).email("email").password("123").name("name")
         .role("Admin").build();
 
     // Act
     userDAO.save(user);
 
     // Assert
-    assertEquals(expectedResult, userDAO.findById(1));
+    assertEquals(user, userDAO.findById(1));
   }
 
   @Test
   public void findByEmail() {
     // Arrange
-    User user = User.builder().email("email").password("123").name("name").role("Admin").build();
-    User expectedResult = User.builder().id(1).email("email").password("123").name("name")
+    User user = User.builder().id(1).email("email").password("123").name("name")
         .role("Admin").build();
 
     // Act
     userDAO.save(user);
 
     // Assert
-    assertEquals(expectedResult, userDAO.findByEmail("email"));
+    assertEquals(user, userDAO.findByEmail("email"));
   }
 
 
   @Test
   public void findByRole() {
     //Arrange
-    User user1 = User.builder().email("email").password("123").name("user_01").role("Admin").build();
-    User user2 = User.builder().email("email").password("123").name("user_02").role("Admin").build();
+    User user1 = User.builder().id(1).email("email").password("123").name("user_01").role("Admin").build();
+    User user2 = User.builder().id(2).email("email").password("123").name("user_02").role("Admin").build();
 
     // Act
     userDAO.save(user1);
