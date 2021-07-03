@@ -61,8 +61,15 @@
       <plugin>
         <groupId>org.wildfly.plugins</groupId>
         <artifactId>wildfly-maven-plugin</artifactId>
+
         <version>2.0.2.Final</version>
         <configuration>
+          <server-args>
+<!--            <server-arg>-Djboss.http.port=8300</server-arg>-->
+<!--            <server-arg>-Djboss.https.port=8443</server-arg>-->
+            <server-arg>-Djboss.management.http.port=8300</server-arg>
+<!--            <server-arg>-Djboss.management.https.port=9993</server-arg>-->
+          </server-args>
           <add-user>
             <users>
               <user>
@@ -72,6 +79,7 @@
             </users>
           </add-user>
           <version>9.0.2.Final</version>
+          <port>8300</port>
         </configuration>
       </plugin>
     </plugins>
