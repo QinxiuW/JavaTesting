@@ -1,5 +1,6 @@
 package com.qinxiu.jwtlogin.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -26,7 +27,7 @@ public class User {
    * user's identifier.
    */
   @Id
-//  @GeneratedValue(strategy = GenerationType.SEQUENCE)
+  @GeneratedValue(strategy = GenerationType.SEQUENCE)
   private int id;
 
   /**
@@ -42,6 +43,7 @@ public class User {
   /**
    * user's encrypted password.
    */
+  @JsonIgnore
   private String password;
 
   /**

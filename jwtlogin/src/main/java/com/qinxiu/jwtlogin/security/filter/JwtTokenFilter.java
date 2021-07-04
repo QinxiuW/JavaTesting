@@ -1,8 +1,9 @@
-package com.qinxiu.jwtlogin.filter;
+package com.qinxiu.jwtlogin.security.filter;
 
 
-import com.qinxiu.jwtlogin.dto.JwtPayloadDto;
+import com.qinxiu.jwtlogin.security.entity.JwtPayload;
 import com.qinxiu.jwtlogin.helper.JwtAuthHelper;
+import com.qinxiu.jwtlogin.security.services.ICostumeUserDetailsService;
 import java.io.IOException;
 import javax.servlet.FilterChain;
 import javax.servlet.ServletException;
@@ -25,7 +26,7 @@ public class JwtTokenFilter extends OncePerRequestFilter {
   private String secret;
 
   @Autowired
-  private com.qinxiu.jwtlogin.configuration.CostumeUserDetailsService CostumeUserDetailsService;
+  private ICostumeUserDetailsService CostumeUserDetailsService;
 
   private static final Logger logger = LoggerFactory.getLogger(JwtTokenFilter.class);
 
@@ -37,7 +38,7 @@ public class JwtTokenFilter extends OncePerRequestFilter {
 
       String accessToken = parseJwt(request); //get jwt token from request
       if (accessToken != null && JwtAuthHelper.verifyToken(accessToken,secret)){
-        JwtPayloadDto payload = JwtAuthHelper.getPayload(accessToken);
+        JwtPayload payload = JwtAuthHelper.getPayload(accessToken);
         // can be email/id/name
         UserDetails userDetails = CostumeUserDetailsService.loadUserById(payload.getUserId());
         UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(
@@ -46,8 +47,6 @@ public class JwtTokenFilter extends OncePerRequestFilter {
 
         // set the authentication into securityContextHolder
         SecurityContextHolder.getContext().setAuthentication(authentication);
-      }else{
-        logger.error("Invalid token");
       }
     } catch(Exception e){
       logger.error("Cannot set user authentication: {}", e);

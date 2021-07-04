@@ -5,7 +5,7 @@ import com.auth0.jwt.JWTVerifier;
 import com.auth0.jwt.algorithms.Algorithm;
 import com.auth0.jwt.exceptions.JWTVerificationException;
 import com.auth0.jwt.interfaces.DecodedJWT;
-import com.qinxiu.jwtlogin.dto.JwtPayloadDto;
+import com.qinxiu.jwtlogin.security.entity.JwtPayload;
 import java.io.UnsupportedEncodingException;
 import java.util.Date;
 import org.slf4j.Logger;
@@ -21,9 +21,15 @@ public class JwtAuthHelper {
 
   private static final Logger logger = LoggerFactory.getLogger(JwtAuthHelper.class);
 
-  public static String generateToken(JwtPayloadDto payload,String secret,Integer expirationMs) throws UnsupportedEncodingException {
+  public static String generateToken(JwtPayload payload,String secret,Integer expirationMs){
 
-    Algorithm algorithm = Algorithm.HMAC256(secret);
+    Algorithm algorithm = null;
+    try {
+      algorithm = Algorithm.HMAC256(secret);
+    } catch (UnsupportedEncodingException e) {
+       logger.error("jwt token generation error");
+       return null;
+    }
     return JWT.create()
         .withClaim("userId", payload.getUserId())
         .withClaim("role", payload.getRole())
@@ -43,11 +49,11 @@ public class JwtAuthHelper {
     }
   }
 
-  public static JwtPayloadDto getPayload(String token) {
+  public static JwtPayload getPayload(String token) {
     DecodedJWT decodedJWT = JWT.decode(token);
     Integer userId = decodedJWT.getClaim("userId").asInt();
     String role = decodedJWT.getClaim("role").asString();
-    return JwtPayloadDto.builder().userId(userId).role(role).build();
+    return JwtPayload.builder().userId(userId).role(role).build();
   }
 
 

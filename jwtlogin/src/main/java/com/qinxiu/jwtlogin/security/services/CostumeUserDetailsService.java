@@ -1,4 +1,4 @@
-package com.qinxiu.jwtlogin.configuration;
+package com.qinxiu.jwtlogin.security.services;
 
 import com.qinxiu.jwtlogin.dao.IUserDAO;
 import java.util.ArrayList;
@@ -15,56 +15,43 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 
 
-public class CostumeUserDetailsService{
+public class CostumeUserDetailsService implements ICostumeUserDetailsService {
 
   @Autowired
   private IUserDAO userDAO;
 
   /**
    * Load the user details by name.
-   * @param s {@code String} name.
+   *
+   * @param username {@code String} name.
    * @return {@link UserDetails}
    * @throws UsernameNotFoundException exception
    */
-  public UserDetails loadUserByUsername(String s) throws UsernameNotFoundException {
+  public UserDetails loadUserByUsername(String username) {
 
     // find the user by email
-    var user = userDAO.findByName(s);
-    if (user == null){
-      throw new UsernameNotFoundException("User Not Found with username: "+s);
-    //  user doesnt exist
-    }
-    List<GrantedAuthority> grantedAuthorities = new ArrayList<>();
-    if (user.getRole() != null){
-      grantedAuthorities.add(new SimpleGrantedAuthority(user.getRole()));
-    }
-    return new User(user.getName(),user.getPassword(), grantedAuthorities);
+    var user = userDAO.findByName(username);
+    return loadUser(user);
   }
 
   /**
    * Load the user details by email.
+   *
    * @param email {@code String}
    * @return {@link UserDetails}
    * @throws UsernameNotFoundException exception
    */
-  public UserDetails loadUserByEmail(String email) throws UsernameNotFoundException {
+  public UserDetails loadUserByEmail(String email) {
 
     // find the user by email
     var user = userDAO.findByEmail(email);
-    if (user == null){
-      throw new UsernameNotFoundException("User Not Found with email: "+email);
-      //  user doesnt exist
-    }
-    List<GrantedAuthority> grantedAuthorities = new ArrayList<>();
-    if (user.getRole() != null){
-      grantedAuthorities.add(new SimpleGrantedAuthority(user.getRole()));
-    }
-    return new User(user.getName(),user.getPassword(), grantedAuthorities);
+    return loadUser(user);
   }
 
 
   /**
    * Load the user details by id.
+   *
    * @param id {@code Integer}
    * @return {@link UserDetails}
    * @throws UsernameNotFoundException exception
@@ -73,18 +60,20 @@ public class CostumeUserDetailsService{
 
     // find the user by email
     var user = userDAO.findById(id);
-    if (user == null){
-      throw new UsernameNotFoundException("User Not Found with email: "+id);
-      //  user doesnt exist
-    }
-    List<GrantedAuthority> grantedAuthorities = new ArrayList<>();
-    if (user.getRole() != null){
-      grantedAuthorities.add(new SimpleGrantedAuthority(user.getRole()));
-    }
-    return new User(user.getName(),user.getPassword(), grantedAuthorities);
+    return loadUser(user);
   }
 
 
-
+  private User loadUser(com.qinxiu.jwtlogin.model.User user) {
+    if (user == null) {
+      //throw error
+      return null;
+    }
+    List<GrantedAuthority> grantedAuthorities = new ArrayList<>();
+    if (user.getRole() != null) {
+      grantedAuthorities.add(new SimpleGrantedAuthority(user.getRole()));
+    }
+    return new User(user.getName(), user.getPassword(), grantedAuthorities);
+  }
 
 }

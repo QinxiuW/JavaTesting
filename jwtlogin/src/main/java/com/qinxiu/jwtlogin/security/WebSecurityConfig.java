@@ -1,12 +1,12 @@
-package com.qinxiu.jwtlogin.configuration;
+package com.qinxiu.jwtlogin.security;
 
-import com.qinxiu.jwtlogin.filter.JwtTokenFilter;
-import org.springframework.beans.factory.annotation.Autowired;
+import com.qinxiu.jwtlogin.security.services.CostumeUserDetailsService;
+import com.qinxiu.jwtlogin.security.filter.JwtTokenFilter;
+import com.qinxiu.jwtlogin.security.services.ICostumeUserDetailsService;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
-import org.springframework.security.config.annotation.web.builders.WebSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.config.http.SessionCreationPolicy;
@@ -29,7 +29,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
   //
   @Bean
-  protected CostumeUserDetailsService costumeUserDetailsService() {
+  protected ICostumeUserDetailsService costumeUserDetailsService() {
     return new CostumeUserDetailsService();
   }
 
@@ -47,8 +47,8 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 //        .exceptionHandling().authenticationEntryPoint(unauthorizedHandler).and()
         .exceptionHandling().and()
         .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS).and()
-        .authorizeRequests().antMatchers("/api/auth/**").permitAll()
-        .antMatchers("/api/test/**").permitAll()
+        .authorizeRequests()
+        .antMatchers("/api/auth/**","/api/reg").permitAll()
         .anyRequest().authenticated();
 
     http.addFilterBefore(authenticationJwtTokenFilter(),

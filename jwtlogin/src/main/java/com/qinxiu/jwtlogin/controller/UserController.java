@@ -2,10 +2,20 @@ package com.qinxiu.jwtlogin.controller;
 
 
 import com.qinxiu.jwtlogin.dao.IUserDAO;
+import com.qinxiu.jwtlogin.dto.UserRegDto;
+import com.qinxiu.jwtlogin.helper.customeException.BusinessException;
+import com.qinxiu.jwtlogin.helper.customeException.BusinessStatus;
+import com.qinxiu.jwtlogin.helper.customeException.ResponseResult;
+import com.qinxiu.jwtlogin.helper.statics.UserRole;
 import com.qinxiu.jwtlogin.model.User;
+import javax.annotation.Resource;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -14,21 +24,44 @@ import org.springframework.web.bind.annotation.RestController;
 
 public class UserController {
 
-  @Autowired
+  @Resource
   IUserDAO userDAO;
 
-  @GetMapping("test")
-  public String test() {
+  @Resource
+  private BCryptPasswordEncoder passwordEncoder;
 
-    User user = User.builder().email("email").password("123").name("name").role("Admin").build();
+  @PostMapping("/api/reg")
+  public ResponseResult<User> registerUser(@RequestBody UserRegDto userReg) {
+
+    User user = initUser(userReg);
     userDAO.save(user);
-    return "ok";
+
+    // send email
+    return ResponseResult.<User>builder().code(BusinessStatus.OK.getCode())
+        .message(BusinessStatus.OK.getMessage())
+        .data(user)
+        .build();
   }
 
 
+  private User initUser(UserRegDto userReg) {
+    // validate userReg
+    if (userReg == null
+        || StringUtils.isEmpty(userReg.getEmail())
+        || StringUtils.isEmpty(userReg.getName())
+        || StringUtils.isEmpty(userReg.getPassword())){
+      throw new BusinessException(BusinessStatus.USER_INVALID_USER_REG);
+    }
+
+    // mapping userReg into User
+    return User.builder().name(userReg.getName())
+                            .email(userReg.getEmail())
+                            .password(passwordEncoder.encode(userReg.getPassword()))
+                            .role(UserRole.NORMAL.name()).build();
+  }
+
   @GetMapping("ping")
   public String ping() {
-
-    return "pong";
+    return "user controller pong";
   }
 }

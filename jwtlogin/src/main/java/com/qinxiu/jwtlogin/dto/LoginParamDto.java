@@ -1,26 +1,21 @@
 package com.qinxiu.jwtlogin.dto;
 
-import javax.persistence.Entity;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
+import lombok.ToString;
 
 @NoArgsConstructor
 @AllArgsConstructor
 @Data
 @Builder
+@ToString
 @EqualsAndHashCode
-public class JwtPayloadDto {
+public class LoginParamDto {
 
-  /**
-   * User's identifier.
-   */
-  private Integer userId;
+  private String email;
 
-  /**
-   * authority role.
-   */
-  private String role;
+  private String pwd;
 }
