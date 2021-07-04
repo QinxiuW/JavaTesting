@@ -16,8 +16,9 @@ public enum BusinessStatus {
   //                810 - 819 -> Auth status code
   //=========================================================================================
   AUTH_INVALID_LOGIN_PARAM(810, "Invalid login param"),
-  AUTH_AUTHENTICATION_ERROR(811, "Authentication error");
-
+  AUTH_AUTHENTICATION_ERROR(811, "Authentication error"),
+  AUTH_INVALID_TOKEN(812,"Invalid Token"),
+  AUTH_TOKEN_EXPIRED(813,"Token expired");
 
   private final Integer code;
   private final String message;

@@ -1,6 +1,8 @@
 package com.qinxiu.jwtlogin.security.filter;
 
 
+import com.qinxiu.jwtlogin.helper.customeException.BusinessException;
+import com.qinxiu.jwtlogin.helper.customeException.BusinessStatus;
 import com.qinxiu.jwtlogin.security.entity.JwtPayload;
 import com.qinxiu.jwtlogin.helper.JwtAuthHelper;
 import com.qinxiu.jwtlogin.security.services.ICostumeUserDetailsService;
@@ -37,20 +39,25 @@ public class JwtTokenFilter extends OncePerRequestFilter {
     try{
 
       String accessToken = parseJwt(request); //get jwt token from request
-      if (accessToken != null && JwtAuthHelper.verifyToken(accessToken,secret)){
+      if (accessToken != null ){
+
+        if (!JwtAuthHelper.verifyToken(accessToken,secret)){
+          throw new BusinessException(BusinessStatus.AUTH_INVALID_TOKEN);
+        }
+
+        // get payload info
         JwtPayload payload = JwtAuthHelper.getPayload(accessToken);
-        // can be email/id/name
+        // set authentication info into SecurityContextHolder
         UserDetails userDetails = CostumeUserDetailsService.loadUserById(payload.getUserId());
         UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(
             userDetails, null, userDetails.getAuthorities());
         authentication.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
-
-        // set the authentication into securityContextHolder
         SecurityContextHolder.getContext().setAuthentication(authentication);
       }
     } catch(Exception e){
       logger.error("Cannot set user authentication: {}", e);
     }
+    // continue
     filterChain.doFilter(request, response);
   }
 
@@ -61,7 +68,6 @@ public class JwtTokenFilter extends OncePerRequestFilter {
     if (StringUtils.hasText(headerAuth) && headerAuth.startsWith("Bearer ")) {
       return headerAuth.substring(7, headerAuth.length());
     }
-
     return null;
   }
 

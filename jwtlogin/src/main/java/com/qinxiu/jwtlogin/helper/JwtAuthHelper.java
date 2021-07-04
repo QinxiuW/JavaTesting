@@ -42,6 +42,7 @@ public class JwtAuthHelper {
     try {
       Algorithm algorithm = Algorithm.HMAC256(secret);
       JWTVerifier verifier = JWT.require(algorithm).build();
+      //verify signature & expDate
       DecodedJWT jwt = verifier.verify(token);
       return true;
     } catch (UnsupportedEncodingException | JWTVerificationException e) {
@@ -55,6 +56,5 @@ public class JwtAuthHelper {
     String role = decodedJWT.getClaim("role").asString();
     return JwtPayload.builder().userId(userId).role(role).build();
   }
-
 
 }
