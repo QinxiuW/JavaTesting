@@ -1,6 +1,7 @@
 package com.qinxiu.jwtlogin.services;
 
 import com.qinxiu.jwtlogin.model.User;
+import java.util.List;
 import java.util.Set;
 
 public interface IUserService {
@@ -35,9 +36,9 @@ public interface IUserService {
 
   /**
    * Find all users.
-   * @return {@link Set<User>}
+   * @return {@link List<User>}
    */
-  Set<User> getAll();
+  List<User> getAll();
 
   /**
    * Delete a user by it id.

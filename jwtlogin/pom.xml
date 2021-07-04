@@ -25,11 +25,22 @@
     <!--      <artifactId>spring-boot-starter</artifactId>-->
     <!--    </dependency>-->
 
+    <!-- Auth -->
+    <dependency>
+      <groupId>com.auth0</groupId>
+      <artifactId>java-jwt</artifactId>
+      <version>3.2.0</version>
+    </dependency>
 
     <!--    web-->
     <dependency>
       <groupId>org.springframework.boot</groupId>
       <artifactId>spring-boot-starter-web</artifactId>
+    </dependency>
+
+    <dependency>
+      <groupId>org.springframework.boot</groupId>
+      <artifactId>spring-boot-starter-security</artifactId>
     </dependency>
 
     <!-- Crud & Database -->
@@ -44,7 +55,7 @@
       <scope>runtime</scope>
     </dependency>
 
-    <!-- Lombok -->
+    <!-- Utils -->
     <dependency>
       <groupId>org.projectlombok</groupId>
       <artifactId>lombok</artifactId>

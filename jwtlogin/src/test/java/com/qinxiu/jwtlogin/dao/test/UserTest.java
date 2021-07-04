@@ -8,7 +8,6 @@ import com.qinxiu.jwtlogin.model.User;
 import java.util.Set;
 import javax.annotation.Resource;
 import javax.transaction.Transactional;
-import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.boot.test.context.SpringBootTest;
