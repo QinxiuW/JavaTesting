@@ -33,8 +33,8 @@ public class JwtAuthHelper {
     return JWT.create()
         .withClaim("userId", payload.getUserId())
         .withClaim("role", payload.getRole())
-        .withClaim("exp", new Date((new Date()).getTime() + expirationMs))
-        .withClaim("iat", new Date())
+        .withIssuedAt(new Date())
+        .withExpiresAt(new Date((new Date()).getTime() + expirationMs))
         .sign(algorithm);
   }
 
