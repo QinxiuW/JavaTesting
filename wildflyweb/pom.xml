@@ -6,7 +6,7 @@
   <parent>
     <groupId>org.springframework.boot</groupId>
     <artifactId>spring-boot-starter-parent</artifactId>
-    <version>1.5.22.RELEASE</version>
+    <version>2.3.12.RELEASE</version>
     <relativePath/> <!-- lookup parent from repository -->
   </parent>
   <groupId>com.web</groupId>
@@ -78,7 +78,7 @@
               </user>
             </users>
           </add-user>
-          <version>9.0.2.Final</version>
+          <version>18.0.0.Final</version>
           <port>8300</port>
         </configuration>
       </plugin>

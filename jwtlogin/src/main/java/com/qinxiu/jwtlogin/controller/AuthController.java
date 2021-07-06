@@ -29,10 +29,10 @@ import org.springframework.web.bind.annotation.RestController;
 public class AuthController {
 
   @Value("${jwtAuth.config.secret}")
-  private  String secret;
+  private String secret;
 
   @Value("${jwtAuth.config.expirationMs}")
-  private  int expirationMs;
+  private int expirationMs;
 
   @Resource
   private IUserDAO userDAO;
@@ -47,42 +47,41 @@ public class AuthController {
 
     // find the user
     User user = userDAO.findByEmail(loginParamDto.getEmail());
-    if (user ==null){
+    if (user == null) {
       throw new BusinessException(BusinessStatus.USER_NOT_FOUND);
     }
 
     // authentication
-    boolean isMatched= passwordEncoder.matches(loginParamDto.getPwd(),user.getPassword());
-    if(!isMatched){
+    boolean isMatched = passwordEncoder.matches(loginParamDto.getPwd(), user.getPassword());
+    if (!isMatched) {
       throw new BusinessException(BusinessStatus.AUTH_AUTHENTICATION_ERROR);
     }
 
     // generate JWT token
-    JwtPayload payload = new JwtPayload(user.getId(),user.getRole());
-    String token = JwtAuthHelper.generateToken(payload,secret,expirationMs);
+    JwtPayload payload = new JwtPayload(user.getId(), user.getRole());
+    String token = JwtAuthHelper.generateToken(payload, secret, expirationMs);
 
     // return the result
     Map<String, Object> result = new HashMap<String, Object>();
-    result.put("token",token);
-    result.put("userInfo",user);
-
+    result.put("token", token);
+    result.put("userInfo", user);
 
     return ResponseResult.<Map<String, Object>>builder().code(BusinessStatus.OK.getCode())
         .message(BusinessStatus.OK.getMessage()).data(result).build();
   }
 
 
-  private void validateLoginParam(LoginParamDto loginParam){
-    if (loginParam ==null ||
-        StringUtils.isEmpty(loginParam.getEmail()) ||
-        StringUtils.isEmpty(loginParam.getPwd())){
+  private void validateLoginParam(LoginParamDto loginParam) {
+    if (loginParam == null
+        || StringUtils.isEmpty(loginParam.getEmail())
+        || StringUtils.isEmpty(loginParam.getPwd())) {
       throw new BusinessException(BusinessStatus.AUTH_INVALID_LOGIN_PARAM);
     }
   }
 
 
   @GetMapping("/ping")
-  public String ping(){
+  public String ping() {
     return "authController pong";
   }
 }
