@@ -11,7 +11,7 @@ public interface IUserService {
    * @param user {@link User} User object
    * @return {@code Integer} 1: success , 0: failed
    */
-  int registerUser(User user);
+  User registerUser(User user);
 
   /**
    * Update the corresponding user properties.
@@ -29,10 +29,10 @@ public interface IUserService {
 
   /**
    * Find the User by id.
-   * @param id {@code Integer} User's identifier
+   * @param id {@code int} User's identifier
    * @return {@link User} User Object
    */
-  User getById(Integer id);
+  User getById(int id);
 
   /**
    * Find all users.
@@ -42,8 +42,8 @@ public interface IUserService {
 
   /**
    * Delete a user by it id.
-   * @param id {@code Integer} User's identifier
-   * @return {@code Integer} 1: success , 0: failed
+   * @param id {@code int} User's identifier
+   * @return {@code int} 1: success , 0: failed
    */
-  int deleteUser(Integer id);
+  int deleteUser(int id);
 }

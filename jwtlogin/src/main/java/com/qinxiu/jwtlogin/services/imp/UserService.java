@@ -15,16 +15,8 @@ public class UserService implements IUserService {
 
 
   @Override
-  public int registerUser(User user) {
-    try {
-      userDAO.save(user);
-      return 1;
-    } catch (Exception e) {
-
-      //log
-      return 0;
-    }
-
+  public User registerUser(User user) {
+    return userDAO.save(user);
   }
 
   @Override
@@ -38,7 +30,7 @@ public class UserService implements IUserService {
   }
 
   @Override
-  public User getById(Integer id) {
+  public User getById(int id) {
     return userDAO.findById(id);
   }
 
@@ -48,7 +40,7 @@ public class UserService implements IUserService {
   }
 
   @Override
-  public int deleteUser(Integer id) {
+  public int deleteUser(int id) {
     User user = userDAO.findById(id);
     if (user !=null){
       userDAO.delete(user);

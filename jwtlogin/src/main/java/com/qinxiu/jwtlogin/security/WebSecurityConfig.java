@@ -1,5 +1,6 @@
 package com.qinxiu.jwtlogin.security;
 
+import com.google.gson.Gson;
 import com.qinxiu.jwtlogin.security.filter.JwtTokenFilter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
@@ -31,17 +32,18 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     return new JwtTokenFilter();
   }
 
-  @Autowired
-  private AuthEntryPointJwt unauthorizedHandler;
+//  @Autowired
+//  private AuthEntryPointJwt unauthorizedHandler;
+
 
   @Override
   protected void configure(HttpSecurity http) throws Exception {
     http.cors().and().csrf().disable()
-       //.exceptionHandling().authenticationEntryPoint(unauthorizedHandler).and()
+        //.exceptionHandling().authenticationEntryPoint(unauthorizedHandler).and()
         .exceptionHandling().and()
         .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS).and()
         .authorizeRequests()
-        .antMatchers("/api/auth/**","/api/reg").permitAll()
+        .antMatchers("/api/auth/**", "/api/reg").permitAll()
         .anyRequest().authenticated();
 
     http.addFilterBefore(authenticationJwtTokenFilter(),

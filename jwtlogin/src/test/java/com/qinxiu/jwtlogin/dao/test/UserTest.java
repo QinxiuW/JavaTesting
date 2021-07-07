@@ -1,6 +1,7 @@
 package com.qinxiu.jwtlogin.dao.test;
 
-import static org.junit.Assert.*;
+
+
 
 import com.qinxiu.jwtlogin.JwtloginTestApplication;
 import com.qinxiu.jwtlogin.dao.IUserDAO;
@@ -8,13 +9,12 @@ import com.qinxiu.jwtlogin.model.User;
 import java.util.Set;
 import javax.annotation.Resource;
 import javax.transaction.Transactional;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.Assertions;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.annotation.Rollback;
-import org.springframework.test.context.junit4.SpringRunner;
 
-@RunWith(SpringRunner.class)
+
 @SpringBootTest(classes = JwtloginTestApplication.class)
 @Transactional
 @Rollback
@@ -29,10 +29,11 @@ public class UserTest {
     User user = User.builder().id(1).email("email").password("123").name("name").role("Admin").build();
 
     // Act
-    userDAO.save(user);
+    User result = userDAO.save(user);
 
     // Assert
-    assertTrue(userDAO.exists(1));
+    Assertions.assertNotNull(result);
+//    assertTrue(userDAO.exists(1));
   }
 
   @Test
@@ -45,7 +46,7 @@ public class UserTest {
     userDAO.save(user);
 
     // Assert
-    assertEquals(user, userDAO.getOne(1));
+    Assertions.assertEquals(user, userDAO.getOne(1));
   }
 
 
@@ -59,7 +60,7 @@ public class UserTest {
     userDAO.save(user);
 
     // Assert
-    assertEquals(user, userDAO.findById(1));
+    Assertions.assertEquals(user, userDAO.findById(1));
   }
 
   @Test
@@ -72,7 +73,7 @@ public class UserTest {
     userDAO.save(user);
 
     // Assert
-    assertEquals(user, userDAO.findByEmail("email"));
+    Assertions.assertEquals(user, userDAO.findByEmail("email"));
   }
 
 
@@ -88,7 +89,7 @@ public class UserTest {
 
     // Assert
     Set<User> result = userDAO.findByRole("Admin");
-    assertNotNull(result);
-    assertEquals(2, result.size());
+    Assertions.assertNotNull(result);
+    Assertions.assertEquals(2, result.size());
   }
 }

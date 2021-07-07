@@ -8,6 +8,7 @@ import com.qinxiu.jwtlogin.helper.customeException.BusinessStatus;
 import com.qinxiu.jwtlogin.helper.customeException.ResponseResult;
 import com.qinxiu.jwtlogin.helper.statics.UserRole;
 import com.qinxiu.jwtlogin.model.User;
+import com.qinxiu.jwtlogin.services.IUserService;
 import javax.annotation.Resource;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -25,7 +26,7 @@ import org.springframework.web.bind.annotation.RestController;
 public class UserController {
 
   @Resource
-  IUserDAO userDAO;
+  IUserService userService;
 
   @Resource
   private BCryptPasswordEncoder passwordEncoder;
@@ -34,12 +35,12 @@ public class UserController {
   public ResponseResult<User> registerUser(@RequestBody UserRegDto userReg) {
 
     User user = initUser(userReg);
-    userDAO.save(user);
+    User result = userService.registerUser(user);
 
     // send email
     return ResponseResult.<User>builder().code(BusinessStatus.OK.getCode())
         .message(BusinessStatus.OK.getMessage())
-        .data(user)
+        .data(result)
         .build();
   }
 
