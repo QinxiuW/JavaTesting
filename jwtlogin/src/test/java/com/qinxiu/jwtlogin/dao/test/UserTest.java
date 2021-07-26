@@ -9,6 +9,7 @@ import java.util.Set;
 import javax.annotation.Resource;
 import javax.transaction.Transactional;
 import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
 import org.junit.runner.RunWith;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.annotation.Rollback;
@@ -29,10 +30,10 @@ public class UserTest {
     User user = User.builder().id(1).email("email").password("123").name("name").role("Admin").build();
 
     // Act
-    userDAO.save(user);
+    User result = userDAO.save(user);
 
     // Assert
-    assertTrue(userDAO.exists(1));
+    Assertions.assertEquals(user,result);
   }
 
   @Test

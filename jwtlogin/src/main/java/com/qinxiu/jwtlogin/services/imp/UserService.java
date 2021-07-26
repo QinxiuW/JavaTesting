@@ -38,7 +38,7 @@ public class UserService implements IUserService {
   }
 
   @Override
-  public User getById(Integer id) {
+  public User getById(int id) {
     return userDAO.findById(id);
   }
 
@@ -48,7 +48,7 @@ public class UserService implements IUserService {
   }
 
   @Override
-  public int deleteUser(Integer id) {
+  public int deleteUser(int id) {
     User user = userDAO.findById(id);
     if (user !=null){
       userDAO.delete(user);

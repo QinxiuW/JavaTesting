@@ -32,7 +32,7 @@ public interface IUserService {
    * @param id {@code Integer} User's identifier
    * @return {@link User} User Object
    */
-  User getById(Integer id);
+  User getById(int id);
 
   /**
    * Find all users.
@@ -45,5 +45,5 @@ public interface IUserService {
    * @param id {@code Integer} User's identifier
    * @return {@code Integer} 1: success , 0: failed
    */
-  int deleteUser(Integer id);
+  int deleteUser(int id);
 }

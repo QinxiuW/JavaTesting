@@ -44,4 +44,5 @@ public class encryptTest {
     System.out.println(encryptedText);
     System.out.println(textEncryptor.decrypt(encryptedText));
   }
+
 }
