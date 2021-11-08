@@ -9,6 +9,7 @@ import com.qinxiu.jwtlogin.helper.customeException.ResponseResult;
 import com.qinxiu.jwtlogin.helper.statics.UserRole;
 import com.qinxiu.jwtlogin.model.User;
 import javax.annotation.Resource;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.util.StringUtils;
@@ -19,9 +20,9 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-@CrossOrigin
+//@CrossOrigin
 @RestController
-
+@Slf4j
 public class UserController {
 
   @Resource
@@ -35,7 +36,7 @@ public class UserController {
 
     User user = initUser(userReg);
     userDAO.save(user);
-
+    log.info("Registered user"+ user.toString());
     // send email
     return ResponseResult.<User>builder().code(BusinessStatus.OK.getCode())
         .message(BusinessStatus.OK.getMessage())
@@ -62,6 +63,11 @@ public class UserController {
 
   @GetMapping("ping")
   public String ping() {
-    return "user controller pong";
+    return "user controller Get";
+  }
+
+  @PostMapping("ping")
+  public String pingPost() {
+    return "user controller Post";
   }
 }

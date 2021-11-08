@@ -59,6 +59,10 @@ public class JwtTokenFilter extends OncePerRequestFilter {
     } catch(Exception e){
       logger.error("Cannot set user authentication: {}", e);
     }
+    response.addHeader("Access-Control-Allow-Origin","*");
+     response.addHeader("Access-Control-Allow-Methods","GET,POST,DELETE,OPTIONS");
+    response.addHeader("Access-Control-Allow-Headers","Location,Access-Control-Allow-Origin,Access-Control-Allow-Methods");
+
     // continue
     filterChain.doFilter(request, response);
   }
