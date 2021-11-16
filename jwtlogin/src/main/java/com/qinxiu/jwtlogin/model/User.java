@@ -27,7 +27,6 @@ public class User {
    * user's identifier.
    */
   @Id
-  @GeneratedValue(strategy = GenerationType.SEQUENCE)
   private int id;
 
   /**
