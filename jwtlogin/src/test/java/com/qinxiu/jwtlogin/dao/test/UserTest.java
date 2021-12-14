@@ -5,15 +5,19 @@ import static org.junit.Assert.*;
 import com.qinxiu.jwtlogin.JwtloginTestApplication;
 import com.qinxiu.jwtlogin.dao.IUserDAO;
 import com.qinxiu.jwtlogin.model.User;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Set;
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.Future;
 import javax.annotation.Resource;
-import javax.transaction.Transactional;
 import org.junit.Test;
 import org.junit.jupiter.api.Assertions;
 import org.junit.runner.RunWith;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.annotation.Rollback;
 import org.springframework.test.context.junit4.SpringRunner;
+import org.springframework.transaction.annotation.Transactional;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest(classes = JwtloginTestApplication.class)
@@ -91,5 +95,39 @@ public class UserTest {
     Set<User> result = userDAO.findByRole("Admin");
     assertNotNull(result);
     assertEquals(2, result.size());
+  }
+
+  @Test
+  public void asyncTest() throws ExecutionException, InterruptedException {
+    User user = User.builder().id(1).email("email").password("123").name("name").role("Admin").build();
+    userDAO.save(user);
+    long start = System.currentTimeMillis();
+
+    Future<User> future = userDAO.findByNameAsync("name");
+    User response =future.get();
+
+    System.out.println(("Elapsed time: " + (System.currentTimeMillis() - start)));
+    System.out.println(response);
+  }
+
+
+  @Test
+  public void asyncListTest() throws ExecutionException, InterruptedException {
+    User user = User.builder().id(1).email("email").password("123").name("name").role("Admin").build();
+    userDAO.save(user);
+    long start = System.currentTimeMillis();
+
+    List<Future<User>> futures = new ArrayList<>();
+    for (int i = 1; i <= 10; i++) {
+      Future<User> future =  userDAO.findByNameAsync("name");
+      futures.add(future);
+    }
+
+    List<User> response = new ArrayList<>();
+    for (Future<User> future : futures)
+      response.add(future.get());
+
+    System.out.println(("Elapsed time: " + (System.currentTimeMillis() - start)));
+    System.out.println(response);
   }
 }
